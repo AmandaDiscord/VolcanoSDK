@@ -154,7 +154,7 @@ export class ThreadBasedReplier extends EventEmitter {
 }
 
 export type ThreadMessage = {
-	op: string;
+	op: number;
 	data?: any;
 }
 
