@@ -187,7 +187,6 @@ export class ThreadPool extends ThreadBasedReplier {
 	public dir: string;
 	public children: Map<string, Worker>;
 	public taskSizeMap: Map<string, number>;
-	private lastWorkerID: number;
 
 	public constructor(options: { size: number; dir: string; })
 
