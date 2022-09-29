@@ -1,4 +1,4 @@
-export class Plugin {
+class Plugin {
 	constructor(logger, utils) {
 		this.version = "1.0.0";
 		this.logger = logger;
@@ -6,4 +6,4 @@ export class Plugin {
 	}
 }
 
-export default { Plugin }
+module.exports = Plugin;
