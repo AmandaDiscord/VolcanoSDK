@@ -1,5 +1,6 @@
 import { Transform } from "stream"
 import { EventEmitter } from "events";
+import { Worker } from "worker_threads";
 
 export type Logger = {
 	info(message: string, worker?: string): void;
@@ -7,12 +8,12 @@ export type Logger = {
 	error(message: string, worker?: string): void;
 }
 
-export type Mixin<T extends AnyObject, SR extends Array<AnyObject>> = SR extends Array<infer O> ? T & O : never;
+export type Mixin<T extends { [key: string | number | symbol]: any }, SR extends Array<{ [key: string | number | symbol]: any }>> = SR extends Array<infer O> ? T & O : never;
 
 export type Utils = {
 	noop(): void;
 	processLoad(): Promise<number>;
-	isObject<T>(value: T): T is Record<any, any>;
+	isObject<T>(value: T): value is Record<any, any>;
 	isValidKey(key: string): boolean;
 	mixin<T extends Record<string, any>, S extends Array<Record<string, any>>>(target: T, ...sources: S): Mixin<T, S>;
 	createTimeoutForPromise<T>(promise: PromiseLike<T>, timeout: number): Promise<T>;
@@ -153,7 +154,7 @@ export class ThreadBasedReplier extends EventEmitter {
 }
 
 export type ThreadMessage = {
-	op: typeof Constants.workerOPCodes[keyof typeof Constants.workerOPCodes];
+	op: string;
 	data?: any;
 }
 
@@ -184,16 +185,16 @@ export interface ThreadPool {
 export class ThreadPool extends ThreadBasedReplier {
 	public count: number;
 	public dir: string;
-	public children = new Map<string, Worker>();
-	public taskSizeMap = new Map<string, number>();
-	private lastWorkerID = 0;
+	public children: Map<string, Worker>;
+	public taskSizeMap: Map<string, number>;
+	private lastWorkerID: number;
 
 	public constructor(options: { size: number; dir: string; })
 
-	public async execute(message: ThreadMessage): Promise<any>;
-	public async dump(): Promise<void>;
+	public execute(message: ThreadMessage): Promise<any>;
+	public dump(): Promise<void>;
 	public send(id: string, message: ThreadMessage): Promise<any>;
-	public async broadcast(message: ThreadMessage): Promise<Array<any>>;
+	public broadcast(message: ThreadMessage): Promise<Array<any>>;
 }
 
 export class Plugin {
@@ -209,7 +210,7 @@ export class Plugin {
 	public initialize?(): any;
 	public canBeUsed?(resource: string, searchShort?: string): boolean;
 	public infoHandler?(resource: string, searchShort?: string): TrackData | Promise<TrackData>;
-	public streamHandler?(info: import("@lavalink/encoding").TrackInfo, usingFFMPEG: boolean): StreamData | Promise<StreamData>;
+	public streamHandler?(info: any, usingFFMPEG: boolean): StreamData | Promise<StreamData>;
 	public streamPipeline?(stream: import("stream").Readable, filters?: Array<string>): StreamData | Promise<StreamData>;
 	public onWSMessage?(packet: Record<any, any>, socket: WebSocket): any;
 	public routeHandler?(url: URL, req: import("http").IncomingMessage, res: import("http").ServerResponse): any;

@@ -1,6 +1,5 @@
 import { Plugin, LavaLinkConfig, Logger, ThreadPool } from "./types";
 export { Plugin };
-export default { Plugin };
 
 declare global {
 	var lavalinkConfig: RequiredObjectDeep<LavaLinkConfig>;
