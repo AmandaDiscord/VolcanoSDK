@@ -3,9 +3,9 @@ import { EventEmitter } from "events";
 import { Worker } from "worker_threads";
 
 export type Logger = {
-	info(message: string, worker?: string): void;
-	warn(message: string, worker?: string): void;
-	error(message: string, worker?: string): void;
+	info(message: any, worker?: string): void;
+	warn(message: any, worker?: string): void;
+	error(message: any, worker?: string): void;
 }
 
 export type Mixin<T extends { [key: string | number | symbol]: any }, SR extends Array<{ [key: string | number | symbol]: any }>> = SR extends Array<infer O> ? T & O : never;
