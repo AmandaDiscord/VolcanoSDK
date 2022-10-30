@@ -79,7 +79,7 @@ export type TrackData = {
 	entries: Array<TrackInfo>,
 	plData?: {
 		name: string;
-		selectedTrack?: number;
+		selectedTrack: number;
 	}
 }
 
