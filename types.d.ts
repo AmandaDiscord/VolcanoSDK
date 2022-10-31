@@ -160,9 +160,9 @@ export type ThreadMessage = {
 
 export interface ThreadPoolEvents {
 	message: [number, any];
-	spawn: [string, Worker];
-	ready: [string, Worker];
-	death: [string];
+	spawn: [number, Worker];
+	ready: [number, Worker];
+	death: [number];
 	datareq: [number, any];
 }
 
@@ -185,14 +185,14 @@ export interface ThreadPool {
 export class ThreadPool extends ThreadBasedReplier {
 	public count: number;
 	public dir: string;
-	public children: Map<string, Worker>;
-	public taskSizeMap: Map<string, number>;
+	public children: Map<number, Worker>;
+	public taskSizeMap: Map<number, number>;
 
 	public constructor(options: { size: number; dir: string; })
 
 	public execute(message: ThreadMessage): Promise<any>;
 	public dump(): Promise<void>;
-	public send(id: string, message: ThreadMessage): Promise<any>;
+	public send(id: number, message: ThreadMessage): Promise<any>;
 	public broadcast(message: ThreadMessage): Promise<Array<any>>;
 }
 
